@@ -17,17 +17,17 @@ public final class IncidentTicket {
     private final Integer slaMinutes;
     private final String source;
 
-    private IncidentTicket(Builder builder) {
-        this.id = builder.id;
-        this.reporterEmail = builder.reporterEmail;
-        this.title = builder.title;
-        this.description = builder.description;
-        this.priority = builder.priority;
-        this.tags = Collections.unmodifiableList(new ArrayList<>(builder.tags));
-        this.assigneeEmail = builder.assigneeEmail;
-        this.customerVisible = builder.customerVisible;
-        this.slaMinutes = builder.slaMinutes;
-        this.source = builder.source;
+    private IncidentTicket(Builder b) {
+        this.id = b.id;
+        this.reporterEmail = b.reporterEmail;
+        this.title = b.title;
+        this.description = b.description;
+        this.priority = b.priority;
+        this.tags = Collections.unmodifiableList(new ArrayList<>(b.tags));
+        this.assigneeEmail = b.assigneeEmail;
+        this.customerVisible = b.customerVisible;
+        this.slaMinutes = b.slaMinutes;
+        this.source = b.source;
     }
 
     public String getId() {
@@ -71,15 +71,14 @@ public final class IncidentTicket {
     }
 
     public Builder toBuilder() {
-        Builder b = new Builder(this.id, this.reporterEmail, this.title);
-        b.description(this.description);
-        b.priority(this.priority);
-        b.tags(new ArrayList<>(this.tags));
-        b.assigneeEmail(this.assigneeEmail);
-        b.customerVisible(this.customerVisible);
-        b.slaMinutes(this.slaMinutes);
-        b.source(this.source);
-        return b;
+        return new Builder(id, reporterEmail, title)
+                .description(description)
+                .priority(priority)
+                .tags(new ArrayList<>(tags))
+                .assigneeEmail(assigneeEmail)
+                .customerVisible(customerVisible)
+                .slaMinutes(slaMinutes)
+                .source(source);
     }
 
     @Override
@@ -158,19 +157,11 @@ public final class IncidentTicket {
             Validation.requireEmail(reporterEmail, "reporterEmail");
             Validation.requireNonBlank(title, "title");
             Validation.requireMaxLen(title, 80, "title");
-
-            if (priority != null) {
-                Validation.requireOneOf(priority, "priority", "LOW", "MEDIUM", "HIGH", "CRITICAL");
-            }
-
+            Validation.requireOneOf(priority, "priority", "LOW", "MEDIUM", "HIGH", "CRITICAL");
             if (assigneeEmail != null) {
                 Validation.requireEmail(assigneeEmail, "assigneeEmail");
             }
-
-            if (slaMinutes != null) {
-                Validation.requireRange(slaMinutes, 5, 7200, "slaMinutes");
-            }
-
+            Validation.requireRange(slaMinutes, 5, 7200, "slaMinutes");
             return new IncidentTicket(this);
         }
     }

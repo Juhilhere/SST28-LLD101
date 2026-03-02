@@ -13,15 +13,16 @@ public class TryIt {
 
         IncidentTicket assigned = service.assign(t, "agent@example.com");
         IncidentTicket escalated = service.escalateToCritical(assigned);
-        System.out.println("\nAfter service updates (new copy): " + escalated);
-        System.out.println("Original is unchanged: " + t);
+        System.out.println("\nOriginal ticket (unchanged): " + t);
+        System.out.println("Escalated copy: " + escalated);
 
         List<String> tags = escalated.getTags();
         try {
             tags.add("HACKED_FROM_OUTSIDE");
+            System.out.println("\nAfter external tag mutation: " + escalated);
         } catch (UnsupportedOperationException e) {
-            System.out.println("\nExternal tag mutation blocked!");
+            System.out.println("\nTags list is immutable, mutation blocked!");
+            System.out.println("After external tag mutation attempt: " + escalated);
         }
-        System.out.println("After external tag mutation attempt: " + escalated);
     }
 }

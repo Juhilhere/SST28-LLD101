@@ -1,6 +1,8 @@
 package com.example.tickets;
 
 import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TicketService {
 
@@ -14,12 +16,11 @@ public class TicketService {
     }
 
     public IncidentTicket escalateToCritical(IncidentTicket t) {
-        java.util.List<String> updatedTags = new java.util.ArrayList<>(t.getTags());
-        updatedTags.add("ESCALATED");
-
+        List<String> newTags = new ArrayList<>(t.getTags());
+        newTags.add("ESCALATED");
         return t.toBuilder()
                 .priority("CRITICAL")
-                .tags(updatedTags)
+                .tags(newTags)
                 .build();
     }
 
